@@ -1,5 +1,7 @@
 package com.authforge.authforge.service;
 
+import com.authforge.authforge.dto.LoginRequest;
+import com.authforge.authforge.dto.LoginResponse;
 import com.authforge.authforge.dto.RegisterRequest;
 import com.authforge.authforge.dto.UserResponse;
 import com.authforge.authforge.exception.AuthException;
@@ -20,8 +22,8 @@ public class AuthService {
         this.passwordService = passwordService;
     }
 
-    public UserResponse register(RegisterRequest request){
-        if(userRepository.existsByEmail(request.getEmail())) {
+    public UserResponse register(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new AuthException("Email already is use");
         }
 
@@ -41,11 +43,23 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         return new UserResponse(
-            savedUser.getId(),
-            savedUser.getEmail(),
-            savedUser.getName(),
-            savedUser.getStatus(),
-            savedUser.getCreatedAt()
+                savedUser.getId(),
+                savedUser.getEmail(),
+                savedUser.getName(),
+                savedUser.getStatus(),
+                savedUser.getCreatedAt()
         );
+    }
+
+    public LoginResponse login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AuthException("Invalid email or password"));
+
+        if (!passwordService.matches(request.getPassword(), user.getPasswordHash())) {
+            throw new AuthException("Invalid email or password");
+        }
+
+        return new LoginResponse("Login Successful");
     }
 }
