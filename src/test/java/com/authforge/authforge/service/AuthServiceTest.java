@@ -8,7 +8,6 @@ import com.authforge.authforge.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -17,11 +16,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AuthServiceTest {
+
     @Mock
     private UserRepository userRepository;
 
     @Mock
     private PasswordService passwordService;
+
+    @Mock
+    private JwtService jwtService;
 
     private AuthService authService;
 
@@ -31,7 +34,8 @@ class AuthServiceTest {
 
         authService = new AuthService(
                 userRepository,
-                passwordService
+                passwordService,
+                jwtService
         );
     }
 

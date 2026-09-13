@@ -16,10 +16,12 @@ import java.time.OffsetDateTime;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordService passwordService;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordService passwordService) {
+    public AuthService(UserRepository userRepository, PasswordService passwordService, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordService = passwordService;
+        this.jwtService = jwtService;
     }
 
     public UserResponse register(RegisterRequest request) {
@@ -54,12 +56,22 @@ public class AuthService {
     public LoginResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AuthException("Invalid email or password"));
+                .orElseThrow(() ->
+                        new AuthException("Invalid email or password")
+                );
 
-        if (!passwordService.matches(request.getPassword(), user.getPasswordHash())) {
+        if (!passwordService.matches(
+                request.getPassword(),
+                user.getPasswordHash()
+        )) {
             throw new AuthException("Invalid email or password");
         }
 
-        return new LoginResponse("Login Successful");
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(
+                "Login successful",
+                token
+        );
     }
 }
