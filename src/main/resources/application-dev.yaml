@@ -1,9 +1,8 @@
 spring:
-
   datasource:
     url: jdbc:postgresql://localhost:5432/authforge
     username: paapabentil
-    password:
+    password: devpassword
 
   jpa:
     hibernate:
@@ -16,3 +15,7 @@ spring:
 
   flyway:
     enabled: true
+
+jwt:
+  secret: 0/Kj+bAiAg7k4geiTlrK+2BRLmMt41B9qMuknlJWDLc=
+  expiration: 3600000
