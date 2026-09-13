@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/authforge
     username: paapabentil
-    password: devpassword
+    password:
 
   jpa:
     hibernate:
@@ -17,5 +17,5 @@ spring:
     enabled: true
 
 jwt:
-  secret: 0/Kj+bAiAg7k4geiTlrK+2BRLmMt41B9qMuknlJWDLc=
+  secret:
   expiration: 3600000
